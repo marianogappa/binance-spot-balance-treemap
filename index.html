@@ -72,7 +72,7 @@
 			.style("stroke", "black")
 			.style("stroke-width", `${strokeWidth}px`)
 			.style("fill", function (d) {
-				return d.data.percent >= 0
+				return !d.data.percent ? `#CCC` : d.data.percent >= 0
 					? `rgb(151, ${Math.max(230-d.data.percent*4, 0)}, 0)`
 					: `rgb(${Math.max(255-d.data.percent*4, 0)}, 25, 60)`
 			});
