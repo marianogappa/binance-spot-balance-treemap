@@ -28,7 +28,10 @@ for k, v in balances.items():
     elif in_btc.get(k):
         balances_in_btc[k] = {"$": v*in_btc[k]["$"], "%": in_btc[k]["%"]}
     elif not in_btc.get(k) and in_bnb.get(k):
-        balances_in_btc[k] = {"$": v*in_bnb[k]["$"]*in_btc["BNB"]["$"], "%": 0}
+        btc_pct = in_btc["BNB"]["%"] / 100.0 + 1
+        bnb_pct = in_bnb[k]["%"] / 100.00 + 1
+        pct = (btc_pct * bnb_pct - 1) * 100
+        balances_in_btc[k] = {"$": v*in_bnb[k]["$"]*in_btc["BNB"]["$"], "%": pct}
 
 # Filter out balances that are too small.
 relevant_balances_in_bnb = { k: v for k, v in balances_in_btc.items() if v["$"] > 0.05 }
