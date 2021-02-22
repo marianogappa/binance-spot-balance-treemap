@@ -77,21 +77,25 @@
 					: `rgb(${Math.max(255-d.data.percent*4, 0)}, 25, 60)`
 			});
 	
+		const urlParams = new URLSearchParams(window.location.search)
+		const isPercent = urlParams.get('p')
+		const totalBtc = data.slice(1).map(d => d.value).reduce((a, b) => a + b, 0)
+
 		// and to add the text labels
 		svg
 		.selectAll("text")
 		.data(root.leaves())
 		.enter()
 		.append("text")
-			.attr("x", function(d){ console.log(d); return (d.x1+d.x0)/2})
+			.attr("x", function(d){ return (d.x1+d.x0)/2})
 			.attr("y", function(d){ return (d.y1+d.y0)/2 })
 			.attr("dominant-baseline", "middle")
 			.attr("text-anchor", "middle")
 			.text(function(d){
 				const percent = !d.data.percent ? '' : d.data.percent >= 0 
-					? ` (+${d.data.percent.toFixed(2)}%)` 
-					: ` (${d.data.percent.toFixed(2)}%)`
-				return `${d.data.name} ${d.data.value.toFixed(2)}${percent}`
+					? ` (+${d.data.percent.toFixed(0)}%)` 
+					: ` (${d.data.percent.toFixed(0)}%)`
+				return `${d.data.name} ${isPercent ? `${Math.round(d.data.value / totalBtc * 100)}%` : d.data.value.toFixed(2)}${percent}`
 			})
 			.attr("class", "text")
 
